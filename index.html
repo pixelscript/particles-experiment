@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8"> 
+	<title>
+	</title>
+	<script src="https://code.jquery.com/jquery-2.1.3.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+	<style>
+		html,body,canvas{
+			width:100%;
+			height:100%;
+			margin:0;
+			padding:0;
+		}
+	</style>
+
+</head>
+<body>
+<script src="src/interaction.js"></script>
+<script src="src/point.js"></script>
+<script src="src/vectors.js"></script>
+<script src="src/car.js"></script>
+<script src="src/renderer.js"></script>
+<script src="src/environment.js"></script>
+<script src="src/frame-manager.js"></script>
+<script>
+	$(function(){
+		var frameManager = new FrameManager(60);
+		frameManager.start();	
+	});
+</script>
+</body>
+</html>
