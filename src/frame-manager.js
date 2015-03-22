@@ -1,43 +1,31 @@
-
-var FrameManager = function(fps) {
+var FrameManager = function() {
 	this.interaction = new Interaction();
 	this.renderer = new Renderer();
-	this.env = new Environment(800,this.interaction,this.renderer);
+	this.env = new Environment(1500,this.interaction,this.renderer);
 	this.renderer.setEnvironment(this.env);
-	this.timeBuffer = 0;
-	this.lastTime = 0;
-	this.simTicks = 1000/fps;
-	this.simSeconds = this.simTicks / 1000;
-	this.frameCall = $.proxy(this.frame,this);
-}
-
-FrameManager.prototype.changeFps = function(fps){
-	this.simTicks = 1000/fps;
-	this.simSeconds = this.simTicks / 1000;
+	this.lastTime = Date.now();
+	this.frameCall = this.frame.bind(this);
 }
 
 FrameManager.prototype.start = function(){
+	this.lastTime = Date.now();
 	this.anim = requestAnimationFrame(this.frameCall);	
 }
 
 FrameManager.prototype.stop = function(){
 	cancelAnimationFrame(this.anim);	
 }
+
+FrameManager.prototype.clear = function(){
+	this.renderer.clearEvery = !this.renderer.clearEvery;
+}
 	
 FrameManager.prototype.frame = function(){
-	var now = Date.now();
-	var ticks = now - this.lastTime;
+	var now = Date.now(),
+		difference = (now - this.lastTime)/1000;
 	this.lastTime = now;
-	if(ticks > 100) {
-		ticks = 0;
-	}
-	this.timeBuffer+=ticks;
-	if(this.timeBuffer >= this.simTicks) {
-		while(this.timeBuffer >= this.simTicks) {
-			this.env.tick(this.simSeconds);
-			this.timeBuffer -= this.simTicks;
-		}
-		this.renderer.render(ticks/1000);
-	}
-	requestAnimationFrame(this.frameCall);
+	this.env.tick(difference);
+	
+	this.renderer.render();
+	this.anim = requestAnimationFrame(this.frameCall);
 }
