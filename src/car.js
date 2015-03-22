@@ -31,8 +31,9 @@ Car.prototype.tick = function(t){
 	}
 
 	if(this.pos.y>=this.renderer.height) {
+		var diff = this.pos.y-this.renderer.height;
 		this.pos.x = this.interaction.mouse.x || this.renderer.width/2;
-		this.pos.y = this.interaction.mouse.y || this.renderer.height/2;
+		this.pos.y = this.interaction.mouse.y+diff || this.renderer.height/2;
 		this.pos.z = this.renderer.height/2;
 		this.vector = this.originalVector.copy();
 		if(this.interaction.mouse.vector){
